@@ -31,30 +31,10 @@ namespace AppHbNotifier.Services
             var token = appHarborService.GetAccessToken(code);
             var user = appHarborService.GetUserInformation(token);
 
-            User masterUser = null;
-            if (!string.IsNullOrEmpty(uniqueId))
-            {
-                masterUser = userService.Get(uniqueId);
-            }
-
-            var appUser = AppHarborCreateOrUpdateAccountIfNeeded(token, user, masterUser);
-            return appUser;
-        }
-
-        private User AppHarborCreateOrUpdateAccountIfNeeded(string accessToken, User user, User returnUser)
-        {
-            if (null == returnUser)
-            {
-                returnUser = new User {UserName = user.UserName, EmailAddress = user.EmailAddress};               
-                userService.Save(returnUser);
-            }
-            returnUser.AppHbOAuthToken = accessToken;            
-            return returnUser;
-        }
-
-        private string GenerateUniqueId(string userName)
-        {
-            return userName.MD5Hash(DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture));
+            User appuser = userService.Get(uniqueId) ?? new User { UserName = user.UserName, EmailAddress = user.EmailAddress };            
+            appuser.AppHbOAuthToken = code;
+            userService.Save(appuser);
+            return appuser;
         }
     }
 }
