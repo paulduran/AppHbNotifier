@@ -13,6 +13,7 @@ namespace AppHbNotifier.Controllers
         // POST /api/values
         public HttpResponseMessage<Notification> Post(string id, Notification notification)
         {
+            var client = new HipChat.HipChatClient();
             var response = new HttpResponseMessage<Notification>(notification, HttpStatusCode.Created);
             return response;
         }
