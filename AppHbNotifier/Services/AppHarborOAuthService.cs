@@ -45,7 +45,7 @@ namespace AppHbNotifier.Services
         {
             if (null == returnUser)
             {
-                returnUser = new User {UserName = user.UserName, EmailAddress = user.EmailAddress, UniqueId = GenerateUniqueId(user.UserName)};               
+                returnUser = new User {UserName = user.UserName, EmailAddress = user.EmailAddress};               
                 userService.Save(returnUser);
             }
             returnUser.AppHbOAuthToken = accessToken;            

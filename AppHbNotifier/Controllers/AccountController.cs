@@ -30,24 +30,14 @@ namespace AppHbNotifier.Controllers
             {
                 // Log the user in
                 formsAuthenticationService.SetAuthCookie(user.UserName, true);
-                
-                // make sure we have a username and email set -- if not, require account setup
-                // TODO: Add this check somewhere else -- here they can nav away and we'll only
-                // get them when they try again
-                if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.EmailAddress))
+
+                if (string.IsNullOrEmpty(returnUrl))
                 {
-                    result = RedirectToAction("AccountSetup", new { Id = user.UniqueId, ReturnUrl = returnUrl });
+                    result = RedirectToAction("Index", new { Controller = "Account" });
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(returnUrl))
-                    {
-                        result = RedirectToAction("Index", new { Controller = "Account" });
-                    }
-                    else
-                    {
-                        result = Redirect(returnUrl);
-                    }
+                    result = Redirect(returnUrl);
                 }
             }
 

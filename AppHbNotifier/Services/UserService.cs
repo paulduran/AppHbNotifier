@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using AppHbNotifier.Models;
+using Raven.Client;
 
 namespace AppHbNotifier.Services
 {
@@ -14,17 +15,20 @@ namespace AppHbNotifier.Services
 
     public class UserService : IUserService
     {
-        private static readonly IDictionary<string , User > Users = new Dictionary<string, User>();
+        private readonly IDocumentSession session;
+        
+        public UserService(IDocumentSession session)
+        {
+            this.session = session;
+        }
         public void Save(User user)
         {
-            Users[user.UniqueId] = user;
+            session.Store(user);
+            session.SaveChanges();
         }
         public User Get(string uniqueId)
         {
-            User user;
-            if (Users.TryGetValue(uniqueId, out user))
-                return user;
-            return null;
+            return session.Load<User>(uniqueId);            
         }
     }
 }

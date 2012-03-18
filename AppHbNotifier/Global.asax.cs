@@ -6,6 +6,9 @@ using System.Web.Routing;
 using AppHbNotifier.Services;
 using Autofac;
 using Autofac.Integration.Mvc;
+using Raven.Abstractions.Data;
+using Raven.Client;
+using Raven.Client.Document;
 
 namespace AppHbNotifier
 {
@@ -47,6 +50,21 @@ namespace AppHbNotifier
             BundleTable.Bundles.RegisterTemplateBundles();
         }
 
+        private void RegisterDocumentStore(ContainerBuilder builder)
+        {
+            var parser = ConnectionStringParser<RavenConnectionStringOptions>.FromConnectionStringName("RavenDB");
+            parser.Parse();
+
+            var store = new DocumentStore
+            {
+                ApiKey = parser.ConnectionStringOptions.ApiKey,
+                Url = parser.ConnectionStringOptions.Url,
+            };
+            store.Initialize();
+            builder.RegisterInstance(store).SingleInstance();
+            builder.Register(c => c.Resolve<DocumentStore>().OpenSession()).InstancePerLifetimeScope();
+        }
+
         private void RegisterIoc()
         {
             var builder = new ContainerBuilder();
@@ -54,7 +72,7 @@ namespace AppHbNotifier
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
                 .Where(t => t.Namespace == typeof(IAppHarborService).Namespace)
                 .AsImplementedInterfaces();
-
+            RegisterDocumentStore(builder);
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }

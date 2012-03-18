@@ -80,7 +80,7 @@ namespace AppHbNotifier.Services
                        {
                            EmailAddress = obj.email_addresses[0].Value,
                            UserName = obj.username,
-                           UniqueId = obj.id
+                           Id = obj.id
                        };
         }
       
