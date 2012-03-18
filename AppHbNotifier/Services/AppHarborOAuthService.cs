@@ -31,7 +31,11 @@ namespace AppHbNotifier.Services
             var token = appHarborService.GetAccessToken(code);
             var user = appHarborService.GetUserInformation(token);
 
-            User appuser = userService.Get(uniqueId) ?? new User { UserName = user.UserName, EmailAddress = user.EmailAddress };            
+            User appuser = null;
+            if (uniqueId != null)
+                appuser = userService.Get(uniqueId);
+            if (appuser == null)
+                appuser = new User {UserName = user.UserName, EmailAddress = user.EmailAddress};
             appuser.AppHbOAuthToken = code;
             userService.Save(appuser);
             return appuser;
