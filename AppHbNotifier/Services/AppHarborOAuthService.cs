@@ -7,7 +7,7 @@ namespace AppHbNotifier.Services
     public interface IAppHarborOAuthService
     {
         Uri GetAuthenticationEndpoint(string returnToUrl);
-        User OAuthCallback(string code, string uniqueId);
+        User OAuthCallback(string code);
     }
 
     public class AppHarborOAuthService : IAppHarborOAuthService
@@ -26,14 +26,12 @@ namespace AppHbNotifier.Services
             return new Uri(appHarborService.GetAuthorizationUrl(returnToUrl).AbsoluteUri);
         }
 
-        public User OAuthCallback(string code, string uniqueId)
+        public User OAuthCallback(string code)
         {
             var token = appHarborService.GetAccessToken(code);
             var user = appHarborService.GetUserInformation(token);
 
-            User appuser = null;
-            if (uniqueId != null)
-                appuser = userService.Get(uniqueId);
+            User appuser = userService.Get(user.UserName);
             if (appuser == null)
                 appuser = new User {UserName = user.UserName, EmailAddress = user.EmailAddress};
             appuser.AppHbOAuthToken = code;

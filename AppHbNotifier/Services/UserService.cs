@@ -26,9 +26,9 @@ namespace AppHbNotifier.Services
             session.Store(user);
             session.SaveChanges();
         }
-        public User Get(string uniqueId)
+        public User Get(string userName)
         {
-            return session.Load<User>(uniqueId);            
+            return session.Query<User>().SingleOrDefault(x => x.UserName == userName);
         }
     }
 }

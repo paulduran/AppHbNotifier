@@ -22,9 +22,9 @@ namespace AppHbNotifier.Controllers
             return View();
         }
 
-        public ActionResult OAuthComplete(string id, string code, string returnUrl)
+        public ActionResult OAuthComplete(string code, string returnUrl)
         {
-            var user = oAuthService.OAuthCallback(code, id);
+            var user = oAuthService.OAuthCallback(code);
             ActionResult result = null;
             if (user != null)
             {
