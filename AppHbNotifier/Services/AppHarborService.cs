@@ -23,7 +23,7 @@ namespace AppHbNotifier.Services
     {
         private readonly string clientId;
         private readonly string secret ;
-        public AppHarborService(IAppHbSettingsService settings)
+        public AppHarborService(IAppHbSettings settings)
         {
             clientId = settings.ClientId;
             secret = settings.ClientSecret;

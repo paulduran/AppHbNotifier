@@ -6,13 +6,13 @@ using System.Web;
 
 namespace AppHbNotifier.Services
 {
-    public interface IAppHbSettingsService
+    public interface IAppHbSettings
     {
         string ClientId { get; }
         string ClientSecret { get; }
     }
 
-    public class AppHbSettingsService : IAppHbSettingsService
+    public class AppHbSettings : IAppHbSettings
     {
         public string ClientId
         {
