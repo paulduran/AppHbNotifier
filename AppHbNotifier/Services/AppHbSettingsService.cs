@@ -16,12 +16,12 @@ namespace AppHbNotifier.Services
     {
         public string ClientId
         {
-            get { return ConfigurationManager.AppSettings["AppHbClientId"]; }
+            get { return ConfigurationManager.AppSettings["AppHb:ClientId"]; }
         }
 
         public string ClientSecret
         {
-            get { return ConfigurationManager.AppSettings["AppHbClientSecretKey"]; }
+            get { return ConfigurationManager.AppSettings["AppHb:ClientSecretKey"]; }
         }
     }
 }
